@@ -24,6 +24,7 @@ import {
 
 interface Student {
   id: string;
+  admin_no: string;
   name: string;
   roll_number: string;
   class: string;
@@ -43,6 +44,7 @@ const Students = () => {
   const [sectionFilter, setSectionFilter] = useState('all');
   
   const [formData, setFormData] = useState({
+    admin_no: '',
     name: '',
     roll_number: '',
     class: '',
@@ -127,6 +129,7 @@ const Students = () => {
   const handleEdit = (student: Student) => {
     setEditingStudent(student);
     setFormData({
+      admin_no: student.admin_no,
       name: student.name,
       roll_number: student.roll_number,
       class: student.class,
@@ -153,6 +156,7 @@ const Students = () => {
 
   const resetForm = () => {
     setFormData({
+      admin_no: '',
       name: '',
       roll_number: '',
       class: '',
@@ -252,6 +256,9 @@ const Students = () => {
               </CardHeader>
               <CardContent className="space-y-2">
                 <p className="text-sm">
+                  <span className="font-medium">Admin No:</span> {student.admin_no}
+                </p>
+                <p className="text-sm">
                   <span className="font-medium">Roll:</span> {student.roll_number}
                 </p>
                 <p className="text-sm">
@@ -293,6 +300,17 @@ const Students = () => {
           </DialogHeader>
           <form onSubmit={handleSubmit}>
             <div className="grid gap-4 py-4">
+              <div className="space-y-2">
+                <Label htmlFor="admin_no">Admin Number (5 digits) *</Label>
+                <Input
+                  id="admin_no"
+                  value={formData.admin_no}
+                  onChange={(e) => setFormData({ ...formData, admin_no: e.target.value })}
+                  placeholder="12345"
+                  maxLength={5}
+                  required
+                />
+              </div>
               <div className="space-y-2">
                 <Label htmlFor="name">Full Name *</Label>
                 <Input

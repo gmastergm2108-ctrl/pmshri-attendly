@@ -9,7 +9,7 @@ interface AuthContextType {
   session: Session | null;
   loading: boolean;
   signIn: (email: string, password: string) => Promise<void>;
-  signUp: (email: string, password: string, name: string) => Promise<void>;
+  signUp: (email: string, password: string, name: string, role: 'admin' | 'teacher' | 'parent') => Promise<void>;
   signOut: () => Promise<void>;
 }
 
@@ -58,7 +58,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
-  const signUp = async (email: string, password: string, name: string) => {
+  const signUp = async (email: string, password: string, name: string, role: 'admin' | 'teacher' | 'parent') => {
     try {
       const redirectUrl = `${window.location.origin}/dashboard`;
       
@@ -75,15 +75,24 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       
       if (error) throw error;
       
-      // Create profile after signup
+      // Create profile and role after signup
       if (data.user) {
         setTimeout(() => {
-          supabase.from('profiles').insert({
-            user_id: data.user!.id,
-            name,
-          }).then(({ error: profileError }) => {
-            if (profileError) {
-              console.error('Error creating profile:', profileError);
+          Promise.all([
+            supabase.from('profiles').insert({
+              user_id: data.user!.id,
+              name,
+            }),
+            supabase.from('user_roles').insert({
+              user_id: data.user!.id,
+              role,
+            })
+          ]).then(([profileResult, roleResult]) => {
+            if (profileResult.error) {
+              console.error('Error creating profile:', profileResult.error);
+            }
+            if (roleResult.error) {
+              console.error('Error creating role:', roleResult.error);
             }
           });
         }, 0);
