@@ -49,6 +49,35 @@ export type Database = {
           },
         ]
       }
+      parent_students: {
+        Row: {
+          created_at: string
+          id: string
+          student_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          student_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          student_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "parent_students_student_id_fkey"
+            columns: ["student_id"]
+            isOneToOne: false
+            referencedRelation: "students"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           created_at: string
@@ -75,6 +104,7 @@ export type Database = {
       }
       students: {
         Row: {
+          admin_no: string | null
           class: string
           created_at: string
           finger_id: string | null
@@ -86,6 +116,7 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          admin_no?: string | null
           class: string
           created_at?: string
           finger_id?: string | null
@@ -97,6 +128,7 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          admin_no?: string | null
           class?: string
           created_at?: string
           finger_id?: string | null
@@ -109,15 +141,48 @@ export type Database = {
         }
         Relationships: []
       }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      get_user_children: {
+        Args: { _user_id: string }
+        Returns: {
+          student_id: string
+        }[]
+      }
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "teacher" | "parent"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -244,6 +309,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "teacher", "parent"],
+    },
   },
 } as const
