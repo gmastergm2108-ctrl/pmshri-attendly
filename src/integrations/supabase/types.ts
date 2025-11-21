@@ -27,7 +27,7 @@ export type Database = {
           created_at?: string
           device_id?: string | null
           id?: string
-          status?: string
+          status: string
           student_id: string
           timestamp?: string
         }
@@ -49,107 +49,116 @@ export type Database = {
           },
         ]
       }
-      finger_login_logs: {
+      parent_students: {
         Row: {
-          device_id: string | null
-          fingerprint_id: number
+          created_at: string
           id: string
-          login_time: string | null
-          user_id: string | null
+          student_id: string
+          user_id: string
         }
         Insert: {
-          device_id?: string | null
-          fingerprint_id: number
+          created_at?: string
           id?: string
-          login_time?: string | null
-          user_id?: string | null
+          student_id: string
+          user_id: string
         }
         Update: {
-          device_id?: string | null
-          fingerprint_id?: number
+          created_at?: string
           id?: string
-          login_time?: string | null
-          user_id?: string | null
+          student_id?: string
+          user_id?: string
         }
         Relationships: [
           {
-            foreignKeyName: "finger_login_logs_user_id_fkey"
-            columns: ["user_id"]
+            foreignKeyName: "parent_students_student_id_fkey"
+            columns: ["student_id"]
             isOneToOne: false
-            referencedRelation: "users"
+            referencedRelation: "students"
             referencedColumns: ["id"]
           },
         ]
       }
+      profiles: {
+        Row: {
+          created_at: string
+          id: string
+          name: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          name: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          name?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       students: {
         Row: {
+          admin_no: string | null
           class: string
           created_at: string
           finger_id: string | null
           id: string
           name: string
-          parent_phone: string | null
+          parent_phone: string
           roll_number: string
           section: string
           updated_at: string
         }
         Insert: {
+          admin_no?: string | null
           class: string
           created_at?: string
           finger_id?: string | null
           id?: string
           name: string
-          parent_phone?: string | null
+          parent_phone: string
           roll_number: string
           section: string
           updated_at?: string
         }
         Update: {
+          admin_no?: string | null
           class?: string
           created_at?: string
           finger_id?: string | null
           id?: string
           name?: string
-          parent_phone?: string | null
+          parent_phone?: string
           roll_number?: string
           section?: string
           updated_at?: string
         }
         Relationships: []
       }
-      users: {
+      user_roles: {
         Row: {
-          admn_no: string | null
-          class: string | null
-          created_at: string | null
-          email: string | null
-          fingerprint_id: number | null
+          created_at: string
           id: string
-          name: string
           role: Database["public"]["Enums"]["app_role"]
-          section: string | null
+          user_id: string
         }
         Insert: {
-          admn_no?: string | null
-          class?: string | null
-          created_at?: string | null
-          email?: string | null
-          fingerprint_id?: number | null
+          created_at?: string
           id?: string
-          name: string
           role: Database["public"]["Enums"]["app_role"]
-          section?: string | null
+          user_id: string
         }
         Update: {
-          admn_no?: string | null
-          class?: string | null
-          created_at?: string | null
-          email?: string | null
-          fingerprint_id?: number | null
+          created_at?: string
           id?: string
-          name?: string
           role?: Database["public"]["Enums"]["app_role"]
-          section?: string | null
+          user_id?: string
         }
         Relationships: []
       }
@@ -158,10 +167,22 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      get_user_children: {
+        Args: { _user_id: string }
+        Returns: {
+          student_id: string
+        }[]
+      }
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      app_role: "admin" | "teacher" | "student"
+      app_role: "admin" | "teacher" | "parent"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -289,7 +310,7 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
-      app_role: ["admin", "teacher", "student"],
+      app_role: ["admin", "teacher", "parent"],
     },
   },
 } as const
