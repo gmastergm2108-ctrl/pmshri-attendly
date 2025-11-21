@@ -17,18 +17,139 @@ export type Database = {
       attendance: {
         Row: {
           created_at: string
-          fingerprint_id: number
+          device_id: string | null
           id: string
+          status: string
+          student_id: string
+          timestamp: string
         }
         Insert: {
           created_at?: string
-          fingerprint_id: number
+          device_id?: string | null
           id?: string
+          status?: string
+          student_id: string
+          timestamp?: string
         }
         Update: {
           created_at?: string
+          device_id?: string | null
+          id?: string
+          status?: string
+          student_id?: string
+          timestamp?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "attendance_student_id_fkey"
+            columns: ["student_id"]
+            isOneToOne: false
+            referencedRelation: "students"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      finger_login_logs: {
+        Row: {
+          device_id: string | null
+          fingerprint_id: number
+          id: string
+          login_time: string | null
+          user_id: string | null
+        }
+        Insert: {
+          device_id?: string | null
+          fingerprint_id: number
+          id?: string
+          login_time?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          device_id?: string | null
           fingerprint_id?: number
           id?: string
+          login_time?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "finger_login_logs_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      students: {
+        Row: {
+          class: string
+          created_at: string
+          finger_id: string | null
+          id: string
+          name: string
+          parent_phone: string | null
+          roll_number: string
+          section: string
+          updated_at: string
+        }
+        Insert: {
+          class: string
+          created_at?: string
+          finger_id?: string | null
+          id?: string
+          name: string
+          parent_phone?: string | null
+          roll_number: string
+          section: string
+          updated_at?: string
+        }
+        Update: {
+          class?: string
+          created_at?: string
+          finger_id?: string | null
+          id?: string
+          name?: string
+          parent_phone?: string | null
+          roll_number?: string
+          section?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      users: {
+        Row: {
+          admn_no: string | null
+          class: string | null
+          created_at: string | null
+          email: string | null
+          fingerprint_id: number | null
+          id: string
+          name: string
+          role: Database["public"]["Enums"]["app_role"]
+          section: string | null
+        }
+        Insert: {
+          admn_no?: string | null
+          class?: string | null
+          created_at?: string | null
+          email?: string | null
+          fingerprint_id?: number | null
+          id?: string
+          name: string
+          role: Database["public"]["Enums"]["app_role"]
+          section?: string | null
+        }
+        Update: {
+          admn_no?: string | null
+          class?: string | null
+          created_at?: string | null
+          email?: string | null
+          fingerprint_id?: number | null
+          id?: string
+          name?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          section?: string | null
         }
         Relationships: []
       }
@@ -40,7 +161,7 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "teacher" | "student"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -167,6 +288,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "teacher", "student"],
+    },
   },
 } as const

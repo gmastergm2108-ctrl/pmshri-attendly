@@ -3,7 +3,8 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import FingerprintLogs from "./pages/FingerprintLogs";
+import FingerLogin from "./pages/FingerLogin";
+import AdminUsers from "./pages/AdminUsers";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -15,7 +16,9 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<FingerprintLogs />} />
+          <Route path="/" element={<FingerLogin />} />
+          <Route path="/finger-login" element={<FingerLogin />} />
+          <Route path="/admin/users" element={<AdminUsers />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
