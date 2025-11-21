@@ -1,1 +1,4 @@
 project_id = "vmyzqcjnrcvwgdeeshhk"
+
+[functions.log-fingerprint]
+verify_jwt = false

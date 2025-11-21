@@ -17,148 +17,18 @@ export type Database = {
       attendance: {
         Row: {
           created_at: string
-          device_id: string | null
+          fingerprint_id: number
           id: string
-          status: string
-          student_id: string
-          timestamp: string
         }
         Insert: {
           created_at?: string
-          device_id?: string | null
+          fingerprint_id: number
           id?: string
-          status: string
-          student_id: string
-          timestamp?: string
         }
         Update: {
           created_at?: string
-          device_id?: string | null
+          fingerprint_id?: number
           id?: string
-          status?: string
-          student_id?: string
-          timestamp?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "attendance_student_id_fkey"
-            columns: ["student_id"]
-            isOneToOne: false
-            referencedRelation: "students"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      parent_students: {
-        Row: {
-          created_at: string
-          id: string
-          student_id: string
-          user_id: string
-        }
-        Insert: {
-          created_at?: string
-          id?: string
-          student_id: string
-          user_id: string
-        }
-        Update: {
-          created_at?: string
-          id?: string
-          student_id?: string
-          user_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "parent_students_student_id_fkey"
-            columns: ["student_id"]
-            isOneToOne: false
-            referencedRelation: "students"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      profiles: {
-        Row: {
-          created_at: string
-          id: string
-          name: string
-          updated_at: string
-          user_id: string
-        }
-        Insert: {
-          created_at?: string
-          id?: string
-          name: string
-          updated_at?: string
-          user_id: string
-        }
-        Update: {
-          created_at?: string
-          id?: string
-          name?: string
-          updated_at?: string
-          user_id?: string
-        }
-        Relationships: []
-      }
-      students: {
-        Row: {
-          admin_no: string | null
-          class: string
-          created_at: string
-          finger_id: string | null
-          id: string
-          name: string
-          parent_phone: string
-          roll_number: string
-          section: string
-          updated_at: string
-        }
-        Insert: {
-          admin_no?: string | null
-          class: string
-          created_at?: string
-          finger_id?: string | null
-          id?: string
-          name: string
-          parent_phone: string
-          roll_number: string
-          section: string
-          updated_at?: string
-        }
-        Update: {
-          admin_no?: string | null
-          class?: string
-          created_at?: string
-          finger_id?: string | null
-          id?: string
-          name?: string
-          parent_phone?: string
-          roll_number?: string
-          section?: string
-          updated_at?: string
-        }
-        Relationships: []
-      }
-      user_roles: {
-        Row: {
-          created_at: string
-          id: string
-          role: Database["public"]["Enums"]["app_role"]
-          user_id: string
-        }
-        Insert: {
-          created_at?: string
-          id?: string
-          role: Database["public"]["Enums"]["app_role"]
-          user_id: string
-        }
-        Update: {
-          created_at?: string
-          id?: string
-          role?: Database["public"]["Enums"]["app_role"]
-          user_id?: string
         }
         Relationships: []
       }
@@ -167,22 +37,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      get_user_children: {
-        Args: { _user_id: string }
-        Returns: {
-          student_id: string
-        }[]
-      }
-      has_role: {
-        Args: {
-          _role: Database["public"]["Enums"]["app_role"]
-          _user_id: string
-        }
-        Returns: boolean
-      }
+      [_ in never]: never
     }
     Enums: {
-      app_role: "admin" | "teacher" | "parent"
+      [_ in never]: never
     }
     CompositeTypes: {
       [_ in never]: never
@@ -309,8 +167,6 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {
-      app_role: ["admin", "teacher", "parent"],
-    },
+    Enums: {},
   },
 } as const
