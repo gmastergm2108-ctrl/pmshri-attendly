@@ -17,18 +17,71 @@ export type Database = {
       attendance: {
         Row: {
           created_at: string
-          fingerprint_id: number
+          device_id: string | null
           id: string
+          status: string
+          student_id: string
+          timestamp: string
         }
         Insert: {
           created_at?: string
-          fingerprint_id: number
+          device_id?: string | null
           id?: string
+          status?: string
+          student_id: string
+          timestamp?: string
         }
         Update: {
           created_at?: string
-          fingerprint_id?: number
+          device_id?: string | null
           id?: string
+          status?: string
+          student_id?: string
+          timestamp?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "attendance_student_id_fkey"
+            columns: ["student_id"]
+            isOneToOne: false
+            referencedRelation: "students"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      students: {
+        Row: {
+          class: string
+          created_at: string
+          finger_id: string | null
+          id: string
+          name: string
+          parent_phone: string | null
+          roll_number: string
+          section: string
+          updated_at: string
+        }
+        Insert: {
+          class: string
+          created_at?: string
+          finger_id?: string | null
+          id?: string
+          name: string
+          parent_phone?: string | null
+          roll_number: string
+          section: string
+          updated_at?: string
+        }
+        Update: {
+          class?: string
+          created_at?: string
+          finger_id?: string | null
+          id?: string
+          name?: string
+          parent_phone?: string | null
+          roll_number?: string
+          section?: string
+          updated_at?: string
         }
         Relationships: []
       }
